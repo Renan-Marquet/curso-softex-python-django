@@ -14,16 +14,16 @@ x9- dizer o nome do usuário
 
 # declaração
 conta_corrente = "123456-7"
-senha = "9999"
+senha_usuario = "9999"
 saldo_atual = 0
 limite_saldo_negativo = 500.00
-nome_usuario - "José"
+nome_usuario = "José"123111
 
 while True:
-    for i in range(3)
+    for i in range(3):
         conta = input("Entre com a sua conta corrente: ")
         senha = input("Entre com asua senha: ")
-        if conta == conta_corrente anda senha == senha_usuario:
+        if conta == conta_corrente and senha == senha_usuario:
             print(f"Bem vindo {nome_usuario}!")
             acesso_permitido = True
             break
@@ -46,15 +46,15 @@ while True:
             print(f"Seu saldo atual é de {saldo_atual}.")
         elif opcao == "2":
             valor_a_sacar = float(input("Entre com o valor a ser sacado: "))
-            if valor_a sacar <= (saldo_atual + limite_saldo_negativo):
-                saldo -= valor_a_sacar
+            if valor_a_sacar <= (saldo_atual + limite_saldo_negativo):
+                saldo_atual -= valor_a_sacar
                 print("saldo liberado, retire seu valor!")
             else:
                 print("saldo insuficiente")
         elif opcao == "3":
             depositar = float(input("Insira o valor a ser depositado: "))
             if depositar > 0:
-                  saldo += depositar
+                  saldo_atual += depositar
             else:
                  print("Valor inválido!")
         elif opcao == "4":
