@@ -14,7 +14,7 @@ descontos_totais=round(desconto_irpf+desconto_inss+desconto_sindical,2)
 salario_liquido=round(salario_bruto-descontos_totais,2)
 salario_bruto=round(salario_bruto,2)
 
-print(f"\n ********************************")
+print(f"\n ************************************************")
 tempx=salario_bruto
 print(f"\n * Salário Bruto = R$ {Decimal(str(tempx)).quantize(Decimal('0.01'),ROUND_HALF_UP):,.2f} *")
 tempx=desconto_irpf
@@ -30,4 +30,4 @@ print(f"\n * Salário Líquido = R$ {Decimal(str(tempx)).quantize(Decimal('0.01'
 print(f"\n * Salário Líquido = R$ {tempy}  *")
 print("   Notação Brasileira!")
 
-print(f"\n ********************************")
+print(f"\n ************************************************")
