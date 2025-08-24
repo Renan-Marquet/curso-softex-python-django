@@ -26,7 +26,6 @@ print(f"\n * Contribuição Sindical (04%) = R$ {Decimal(str(tempx)).quantize(De
 tempx=salario_liquido
 tempy=f"{tempx:_.2f}"
 tempy=tempy.replace(".",",").replace("_",".")
-print(f"\n * Salário Líquido = R$ {tempy}  *")
 print(f"\n * Salário Líquido = R$ {Decimal(str(tempx)).quantize(Decimal('0.01'),ROUND_HALF_UP):,.2f}  *")
 print(f"\n * Salário Líquido = R$ {tempy}  *")
 print("   Notação Brasileira!")
