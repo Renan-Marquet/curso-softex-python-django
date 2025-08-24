@@ -17,7 +17,7 @@ conta_corrente = "123456-7"
 senha_usuario = "9999"
 saldo_atual = 0
 limite_saldo_negativo = 500.00
-nome_usuario = "José"123111
+nome_usuario = "José"
 
 while True:
     for i in range(3):
