@@ -8,20 +8,20 @@ while nome_produto != "hamburguer":
 cupon=input("Possui um cupom de desconto? Digite S ou N ")
 cupon=cupon.upper()
 if cupon == "S":
-    desconto=input("Entre com o código do cupom ")
-    While True:
-    if desconto==cupom_desconto:
-        print(f"O valor do hamburguer é: R$ {preco_hamburguer:,.2f}")
-        print(f"O valor do desconto é: R$ {preco_hamburguer*0.2:,.2f}")
-        print(f"O valor a pagar é: R$ {preco_hamburguer-preco_hamburguer*0.2:,.2f}")
-        break
-    else:
-        print("Cupom inválido deseja continuar?")
-        denovo=input("Digite S ou N ")
-        denovo=denovo.upper()
-        if denovo=="N":
+    while True:
+        desconto=input("Entre com o código do cupom ")
+        if desconto==cupom_desconto:
+            print(f"O valor do hamburguer é: R$ {preco_hamburguer:,.2f}")
+            print(f"O valor do desconto é: R$ {preco_hamburguer*0.2:,.2f}")
+            print(f"O valor a pagar é: R$ {preco_hamburguer-preco_hamburguer*0.2:,.2f}")
             break
-        
+        elif desconto!=cupom_desconto:
+            print("Cupom inválido deseja continuar?")
+            denovo=input("Digite S ou N ")
+            denovo=denovo.upper()
+            if denovo=="N":
+             #print(f"O valor do hamburguer é: R$ {preco_hamburguer:,.2f}")   
+             break
 
 print(f"O valor do hamburguer é: R$ {preco_hamburguer:,.2f}")
              
