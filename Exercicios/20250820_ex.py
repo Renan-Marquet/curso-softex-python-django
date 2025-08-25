@@ -4,7 +4,8 @@ from decimal import Decimal, ROUND_HALF_UP
 
 
 print("Entre com o valor da hora trabalhada, utilize")
-valor_hora=float(input("o ponto como separador de casas decimais -> R$ "))
+valor_hora=(input("o ponto como separador de casas decimais -> R$ "))
+valor_hora=float(valor_hora.replace(",","."))
 quant_horas=float(input("Entre com a quantidade de horas trabalhadas: - > "))
 salario_bruto=valor_hora*quant_horas
 desconto_irpf=round(salario_bruto*0.11,2)
