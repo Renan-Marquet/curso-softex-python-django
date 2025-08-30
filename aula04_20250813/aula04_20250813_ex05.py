@@ -1,0 +1,5 @@
+frase=input("digite uma frase: -> ")
+primeira=input("escolha uma palavra da frase que vc escreveu e digite-a -> ")
+segunda=input("escreva uma palavra para substituir a escolhida e digite-a -> ")
+frase=frase.replace(primeira,segunda)
+print("esta é a nova frase:  ",frase)
