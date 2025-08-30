@@ -44,25 +44,33 @@ if lado1<(lado2+lado3) and lado2<(lado3+lado1) and lado3<(lado2+lado1):
 if lado1>abs(lado2-lado3) and lado2>abs(lado3-lado1) and lado3>abs(lado1-lado2):
     print("-- Esse é um triângulo válido verificado pela diferença.")
 else:
-    print("** Esse não é um triângulo válido.")
     valido=False
-
-if lado1 == lado2 == lado3:
-    print("* Esse é um triângulo equilátero.")
-if lado1 == lado2 != lado3 or lado2 == lado3 != lado1 or lado3 == lado1 != lado2:
-    print("* Esse é um triângulo isósceles.")
-if lado1 != lado2 != lado3 and valido:
-    print("* Esse é um triângulo escaleno.")
+    print("** Esse não é um triângulo válido.")
+    while valido==False:
+        break
+    
+if valido:
+    if lado1 == lado2 == lado3:
+        print("* Esse é um triângulo equilátero.")
+    if lado1 == lado2 != lado3 or lado2 == lado3 != lado1 or lado3 == lado1 != lado2:
+        print("* Esse é um triângulo isósceles.")
+    if lado1 != lado2 != lado3:
+        print("* Esse é um triângulo escaleno.")
+        
 
 quad1=lado1**2
 quad2=lado2**2
 quad3=lado3**2
 
-if quad1 + quad2 == quad3 or quad2 + quad3 == quad1 or quad3 + quad1 == quad2:
-    print("* Esse é um triângulo retângulo.")
-    reto=True
-if (quad1 + quad2) < quad3 or (quad2 + quad3) < quad1 or (quad3 + quad1) < quad2:
-    print("* Esse é um triângulo obtusângulo.")
-    obtuso=True
-if (( quad1 + quad2) > quad3 or (quad2 + quad3) > quad1 or (quad3 + quad1) > quad2) and not reto and not obtuso:
-    print("* Esse é um triângulo acutângulo.")
+while valido:
+    if quad1 + quad2 == quad3 or quad2 + quad3 == quad1 or quad3 + quad1 == quad2:
+        print("* Esse é um triângulo retângulo.")
+        reto=True
+        break
+    if (quad1 + quad2) < quad3 or (quad2 + quad3) < quad1 or (quad3 + quad1) < quad2:
+        print("* Esse é um triângulo obtusângulo.")
+        obtuso=True
+        break
+    if (( quad1 + quad2) > quad3 or (quad2 + quad3) > quad1 or (quad3 + quad1) > quad2) # and not reto and not obtuso:
+        print("* Esse é um triângulo acutângulo.")
+        break
