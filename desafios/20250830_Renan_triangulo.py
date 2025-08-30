@@ -71,6 +71,6 @@ while valido:
         print("* Esse é um triângulo obtusângulo.")
         obtuso=True
         break
-    if (( quad1 + quad2) > quad3 or (quad2 + quad3) > quad1 or (quad3 + quad1) > quad2) # and not reto and not obtuso:
+    if (( quad1 + quad2) > quad3 or (quad2 + quad3) > quad1 or (quad3 + quad1) > quad2): # and not reto and not obtuso:
         print("* Esse é um triângulo acutângulo.")
         break
