@@ -3,15 +3,15 @@ reprovados=set()
 melhores=set()
 maior=0
 
-for nome,nota in notas:
+for nome,nota in notas: # pode ser for_,nota in notas:
     if nota < 7.0 :
         reprovados.add(nome)
     if nota > maior:
         maior=nota
-for nome,nota in notas:
+for nome,nota in notas: # pode ser for_,nota in notas:
     if nota == maior:
         melhores.add(nome)
-        
+
 melhores=tuple(melhores)
 
 print("\n Maior nota -> ",maior)
