@@ -11,6 +11,6 @@ for nome,status in acessos:
 
 so_falha=falha.difference(sucesso)
        
-print(falha)
+#print(falha)
 print(sucesso)
 print(so_falha)
