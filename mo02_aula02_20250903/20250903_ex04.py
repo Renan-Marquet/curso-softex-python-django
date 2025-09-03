@@ -11,6 +11,8 @@ for nome,nota in notas:
 for nome,nota in notas:
     if nota == maior:
         melhores.add(nome)
+        
+melhores=tuple(melhores)
 
 print("\n Maior nota -> ",maior)
 print(" Alunos com as melhores notas")
