@@ -20,4 +20,4 @@ print(melhores)
 print(" Reprovados com notas menores que 7: ")
 print(reprovados,"\n")
 
-# alunos_nota_baixa - {aluno for aluno, nota in notas if nota < 7.0}
+# alunos_nota_baixa = {aluno for aluno, nota in notas if nota < 7.0}
