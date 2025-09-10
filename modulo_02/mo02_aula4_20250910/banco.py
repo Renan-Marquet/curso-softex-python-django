@@ -72,15 +72,15 @@ def cadastrar_cliente(dados_banco:dict) -> None:
     dados_banco["ultima_conta_base"] = str(nova_conta)
     print(f"Cliente {nome_cliente} cadastrado com sucesso na conta {novo_numero_conta}.") 
 
-    def listar_clientes(banco_dados:dict) -> None:
-        """lista todos os clientes cadastrados no sistema"""
-        print("\n--- Clientes Cadastrados ---")
+def listar_clientes(banco_dados:dict) -> None:
+    """lista todos os clientes cadastrados no sistema"""
+    print("\n--- Clientes Cadastrados ---")
 
-        if not banco_dados["usuarios"]:
-            print("Nenhum cliente cadastrado")
-            return
+    if not banco_dados["usuarios"]:
+        print("Nenhum cliente cadastrado")
+        return
         
-        for conta, usuario in banco_dados["usuarios"].items():
+    for conta, usuario in banco_dados["usuarios"].items():
             print(f"Nome : {usuario["nome"]} | Conta: {conta}")
             print("-"*30)
 
