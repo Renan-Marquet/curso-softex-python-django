@@ -4,25 +4,29 @@ class Contabancaria:
         self.titular= titular
         self.saldo= saldo
 
-
     def depositar(self) -> float:
-        deposito=input("digite o valor depositado")
-        self.saldo=self.saldo+deposito
-        print("Saldo atual: {self.saldo}")
+        valor1=float(self.saldo)
+        deposito=float(input("Digite o valor depositado "))
+        valor1=valor1+deposito
+        self.saldo=valor1
+        print(f"Saldo atual: {valor1}")
 
 
-    def sacar(self,valor: float) -> float:
-        saque=input("digite o valor a sacar")
-        if saque<self.saldo:
-            print("Saldo insuficiente")
+    def sacar(self) -> float:      
+        valor2=float(self.saldo)
+        saque=float(input("Digite o valor a sacar "))
+        if saque>valor2:
+            print("Saldo insuficiente.")
+            #return
         else:
-            self.saldo=self.saldo-saque
-            print("Saldo realizado com sucesso")
-            print("Saldo atual: {self.saldo}")
+            saldo=valor2-saque
+            self.saldo=saldo
+            print("Saque realizado com sucesso")
+            print(f"Saldo atual: {saldo}")
 
 
     def situacao(self) -> None:
-        print(f"{self.titular} {self.saldo}")
+        print(f"O Sr.{self.titular} tem atualmente {self.saldo} de saldo.")
               
 
 titular1=Contabancaria("Antonio",10)
