@@ -14,10 +14,30 @@ dispositivos.
  """
 
 class Teclado:
-    pass
+    def __init__(self):
+        pass
+    def ligar(self):
+        print("O teclado está ligado.")
 class Mouse:
-    pass
+    def __init__(self):
+        pass
+    def ligar(self):
+        print("O mouse está ligado.")
 class Monitor:
-    pass
+    def __init__(self):
+        pass
+    def ligar(self):
+        print("O monitor está ligado.")
 class Computador:
-    def __
+    def __init__(self):
+        self.teclado=Teclado()
+        self.mouse=Mouse()
+        self.monitor=Monitor()
+    def ligar_computador(self):
+        self.teclado.ligar()
+        self.mouse.ligar()
+        self.monitor.ligar()
+        print("O computador foi inicalizado.")
+
+meu_computador=Computador()
+meu_computador.ligar_computador()
