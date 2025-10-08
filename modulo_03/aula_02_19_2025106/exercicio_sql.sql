@@ -1,11 +1,11 @@
--- Active: 1759768854365@@127.0.0.1@3306
+-- Active: 1759940186401@@127.0.0.1@3306
 CREATE TABLE usuarios (
     id INTEGER PRIMARY KEY,
     primeiro_nome TEXT NOT NULL,
     sobrenome TEXT NOT NULL, 
     email TEXT,
     senha INTEGER
-)
+);
 
 CREATE TABLE postagens (
     id INTEGER PRIMARY KEY,
