@@ -1,3 +1,4 @@
+-- Active: 1759940690523@@127.0.0.1@3306
 
 CREATE TABLE alunos (
     id INTEGER PRIMARY KEY,
