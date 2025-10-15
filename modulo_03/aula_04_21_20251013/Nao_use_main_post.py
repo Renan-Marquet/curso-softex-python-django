@@ -28,6 +28,7 @@ def display_menu():
 
 def main():
     """Função principal do programa."""
+    user_model = UserModel()
     blog_model = BlogModel()
 
     while True:
@@ -37,25 +38,27 @@ def main():
         if choice == "A" or "a":
             print("\n--- Cadastro de Postagem ---")
             titulo = input("Título: ")
-            conteudo = input("Conteudo: ")
-            user = user_id
-            blog_model.create_post(titulo, conteudo, user_id)
+            conteudo = input("Conteúdo: ")
+            user = input("user_id: ")
+            blog_model.create_post(titulo, conteudo, user)
+            print("opção A executada")
 
         elif choice == "B" or "b":
-            print("\n--- Buscar Postagem por ID ---")
+            print("\n--- Buscar Postagem por ID post")
             try:
-                id_post = int(input("Digite o ID da postagem: "))
-                blog = blog_model.find_post_by_id(id_post)
+                id_post = int(input("Digite o ID post: "))
+                blog = blog_model.find_post_by_id_post(id_post)
                 if blog:
                     print("\nPostagem encontrada:")
-                    print(f"ID: {id_post['id']}")
-                    print(f"titulo: {id_post['titulo']}")
-                    print(f"conteudo: {id_post['conteudo']}")
-                    print(f"Data de Criação: {user['data_criacao']}")
+                    print(f"ID: {blog['id_post']}")
+                    print(f"titulo: {blog['titulo']}")
+                    print(f"conteudo: {blog['conteudo']}")
+                    print(f"usuario: {blog['id_user']} ")
+                    print(f"Data de Criação: {blog['data_criacao']}")
                 else:
                     print("Post não encontrado.")
             except ValueError:
-                print("ID inválido. Por favor, digite um número.")
+                print("ID post inválido. Por favor, digite um número.")
 
         elif choice == "C" or "c":
             print("\n--- Buscar Postagem por usuário ---")
@@ -64,11 +67,11 @@ def main():
                 blog = blog_model.find_post_by_id_user(user_id)
                 if blog:
                     print("\nPostagem encontrada:")
-                    print(f"ID user:{id_post[user_id]}")
-                    print(f"ID: {id_post['id']}")
-                    print(f"titulo: {id_post['titulo']}")
-                    print(f"conteudo: {id_post['conteudo']}")
-                    print(f"Data de Criação: {user['data_criacao']}")
+                    print(f"ID user:{blog['user_id']}")
+                    print(f"ID: {blog['id_post']}")
+                    print(f"titulo: {blog['titulo']}")
+                    print(f"conteudo: {blog['conteudo']}")
+                    print(f"Data de Criação: {blog['data_criacao']}")
                 else:
                     print("Post não encontrado.")
             except ValueError:
@@ -80,17 +83,17 @@ def main():
             try:
                 id_post = int(input("Digite o ID da postagem: "))
                 print("Deixe em branco os campos que não deseja alterar.")
-                titulo = input("Nova Título: ") or None
+                titulo = input("Novo Título: ") or None
                 conteudo = input("Novo conteudo: ") or None
-                blog_model.update_post_by_id(id_post, titulo, conteudo)
+                blog_model.update_post_by_id_post(id_post, titulo, conteudo)
             except ValueError:
                 print("ID post inválido. Por favor, digite um número.")
 
         elif choice == "E" or "e":
             print("\n--- Deletar Postagem ---")
             try:
-                user_id = int(input("Digite o ID da postagem: "))
-                blog_model.delete_post_by_id(id_post)
+                id_post = int(input("Digite o ID da postagem: "))
+                blog_model.delete_post_by_id_post(id_post)
             except ValueError:
                 print("ID da postagem inválido. Por favor, digite um número.")
 
@@ -99,10 +102,12 @@ def main():
             posts = blog_model.get_all_posts()
             if posts:
                 for post in posts:
-                    print(f"\nID: {post['id']}")
+                    print(f"\nID: {post['id_post']}")
                     print(f"Titulo: {post['titulo']}")
                     print(f"Conteudo: {post['conteudo']}")
+                    print(f"Criador: {post["user_id"]}")
                     print(f"Data de Criação: {user['data_criacao']}")
+                    print(f"Data da ultima alteração: {user['data_atualizacao']}")
                 print("\n--- Fim da lista ---")
             else:
                 print("Nenhuma postagem cadastrada.")

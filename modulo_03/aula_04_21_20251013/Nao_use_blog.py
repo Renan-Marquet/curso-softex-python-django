@@ -45,8 +45,8 @@ class BlogModel:
         finally:
             self.db_conn.close()
 
-    def find_post_by_id(self, id_post):
-        """Busca um usuário pelo ID."""
+    def find_post_by_id_post(self, id_post):
+        """Busca uma postagem pelo ID."""
         self.db_conn.connect()
         self.db_conn.cursor.execute("SELECT * FROM postagem WHERE id = ?;", (id_post,))
         post = self.db_conn.cursor.fetchone()

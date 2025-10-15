@@ -46,8 +46,8 @@ class BlogModel:
                 titulo TEXT NOT NULL UNIQUE,
                 conteudo TEXT NOT NULL,
                 data_criacao DATETIME DEFAULT CURRENT_TIMESTAMP,
-                data_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP
-                id_user INTEGER,
+                data_atualizacao DATETIME DEFAULT CURRENT_TIMESTAMP,
+                id user INTEGER,
                 FOREIGN KEY (id_user) REFERENCES usuarios(id)
             );
         """
@@ -71,27 +71,29 @@ class BlogModel:
         finally:
             self.db_conn.close()
 
-    def find_post_by_id(self, id_post):
+    def find_post_by_id_post(self, id_post):
         """Busca um usuário pelo ID."""
         self.db_conn.connect()
-        self.db_conn.cursor.execute("SELECT * FROM postagem WHERE id = ?;", (id_post,))
+        self.db_conn.cursor.execute("SELECT * FROM postagem WHERE id_post = ?;", (id_post,))
         post = self.db_conn.cursor.fetchone()
         self.db_conn.close()
         return post
        
     def find_post_by_id_user(self, id_user):
-        """Busca um usuário pelo ID."""
+        """Busca uma postagem pelo ID do usuário."""
         self.db_conn.connect()
-        self.db_conn.cursor.execute("SELECT * FROM postagem WHERE id = ?;", (id_user,))
+        self.db_conn.cursor.execute("SELECT * FROM postagem WHERE id_user = ?;", (id_user,))
         post = self.db_conn.cursor.fetchone()
         self.db_conn.close()
         return post
 
     def update_post_by_id_post(self, id_post, titulo=None, conteudo=None):
-        """Atualiza informações de um usuário pelo ID."""
+        """Atualiza informações de uma postagem pelo ID da postagem."""
         self.db_conn.connect()
         updates = []
         params = []
+        params = []
+
         if titulo:
             updates.append("titulo = ?")
             params.append(titulo)
@@ -107,16 +109,16 @@ class BlogModel:
         updates.append("data_atualizacao = ?")
         params.append(datetime.now())
         params.append(id_post)
-        query = f"UPDATE postagem SET {', '.join(updates)} WHERE id = ?;"
+        query = f"UPDATE postagem SET {', '.join(updates)} WHERE id_post = ?;"
 
         self.db_conn.cursor.execute(query, params)
-        print("Usuário atualizado com sucesso!")
+        print("Postagem atualizada com sucesso!")
         self.db_conn.close()
 
-    def delete_post_by_id(self, id_post):
+    def delete_post_by_id_post(self, id_post):
         """Deleta uma postagem pelo ID."""
         self.db_conn.connect()
-        self.db_conn.cursor.execute("DELETE FROM postagem WHERE id = ?;", (id_post,))
+        self.db_conn.cursor.execute("DELETE FROM postagem WHERE id_post= ?;", (id_post,))
         print("Postagem deletada com sucesso!")
         self.db_conn.close()
             
