@@ -57,7 +57,7 @@ def main():
                     user_model.update_user_by_id(user_id, senha, email)
                 else:
                     print("Usuário não encontrado, não pode ser atualizado")
-                    
+
             except ValueError:
                 print("ID inválido. Por favor, digite um número.")
 
@@ -161,7 +161,7 @@ def main():
                     print(f"\nID: {post['id_post']}")
                     print(f"Titulo: {post['titulo']}")
                     print(f"Conteudo: {post['conteudo']}")
-                    #print(f"Criador: {post["user_id"]}")
+                    print(f"Criador: {post["id_user"]}")
                     print(f"Data de Criação: {post['data_criacao']}")
                     print(f"Data da ultima alteração: {post['data_atualizacao']}")
                 print("\n--- Fim da lista ---")
