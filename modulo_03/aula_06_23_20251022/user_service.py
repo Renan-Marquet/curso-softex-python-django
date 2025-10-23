@@ -1,0 +1,173 @@
+# user_service.py
+from user_model import UserModel
+from hasher import hash_senha, verificar_senha
+
+
+class UserService:
+
+    def __init__(self):
+        self.user_model=UserModel()
+
+        """
+        crie um atributo que receberá a UserModel como composição
+        """
+
+    def _safe_user_data(self, user) -> dict | None:
+
+        if user:       
+            return {
+                'id':user['id'],
+                'email':user['email'],
+                'nome_completo':user['nome_completo'],
+                'perfil_acesso':user['perfil_acesso'],
+                'data_criacao':user['data_criacao'],
+                'data_atualizacao':user['data_atualizacao']
+        }      
+        else:
+            return None
+        
+        """
+        este é um método privado que recebe um usuarios do banco.
+        verifique se o usuários existe e então retorne ele sem a sua senha
+        caso ele ão exista retorne None
+        """
+
+    def _is_authorized(
+        self,
+        current_user_id: int | None,
+        current_user_profile: str,
+        target_user_id: int,
+        action: str,
+    ) -> bool:
+       
+
+        if current_user_profile == 'Diretoria':
+            return True
+        elif target_user_id == 0:
+            return False
+        elif action == 'edit_self':
+            return current_user_id == target_user_id
+        else:
+            return False
+
+
+        """
+        Método que verifica o perfil do usuários, se for Diretoria retorne true
+        Se não tiver target_user_id retorn false
+        Se  action == "edit_self" retorne current_user_id == target_user_id
+        No geral retorn false
+        """
+
+    def register_user(
+        self,
+        senha: str,
+        email: str,
+        nome_completo: str,
+        perfil: str = "Afiliado",
+    ) -> tuple[bool, str]:
+        
+        senha=input("entre com a senha")
+        email=input("entre com o email")
+        nome_completo=input("digite seu nome comprelto")
+        
+        if len(senha)<8:
+            print("Erro! A senha deve ter no mínimo 8 caracteres")
+            return False
+        if len(email)<10 or '@' not in email or ".com" not in email:
+            print("Erro! Email inválido")
+            return False
+        else:
+            cripsenha=hash_senha(senha)
+            return self.user_model.create_user(cripsenha,email,nome_completo,perfil)
+        
+        """
+        Método para criar um usuários.
+        o campo senha deve ter no mínimo 8 caracteres, caso contrário retorne False a mensagem de erro.
+        O campo email deve ter pelo menos 10 caracteres, uma @ e terminar com .com, retorne False se não tiver e a mensagem de erro.
+        O campo Nome deve ter apenas letras e não deve estar vazio, retorne False se não tiver e a mensagem de erro.
+        Caso os campos atendas as requisições, faça o hash da senha e salve use o método create_user da User Model
+        """
+
+    def login_user(self, email: str, senha: str) -> tuple[dict | None, str]:
+        """
+        Este método é o login do usuários, deve receber um email e senha não vazios
+        Use o método do find_user_by_email para buscar o usuario
+        Se houver usuarios faça a comparação da senha passada com a senha hash do DB
+        Use a função verificar_senha, se tiver ok, retorn o usuarios pelo método privado _safe_user_data
+        e a mensagem Login bem-sucedido!.
+        Caso contrario retorne None e a mensagem de erro
+        """
+        if self.find_user_by_email():
+            if senha == self.verificar_senha():
+                return self.user_model._safe_user_data(email)
+            else:
+                print("Senha não confere.")
+                print("Acesso negado.")
+                return False       
+        else:
+            print("Usuário não encontrado")
+            return False
+
+
+
+    def update_user_profile(
+        self,
+        current_user_id: int | None,
+        current_user_profile: str,
+        target_user_id: int,
+        new_data: dict,
+    ) -> tuple[bool, str]:
+        """
+        Método para atualizar usuários.
+        Chame o método privado _is_authorized, se o retorno for false, retorne false e acesso negado
+        Confira as chaves em new_data (senha, nome_completo, email), se pelo menos um desses campos,
+        Caso não haja nenhum valor a ser atualizado, encerre a função com False e mensagem de erro.
+        Caso contrátio, chame o método da UserModel update_user_by_id passando o id e o new data
+        """
+        if not self._is_authorized():
+            print("Acesso negado!")
+            return False
+        if new_data.senha != None and new_data.nome_completo != None and new_data.email != None:
+            return self.user_model.update_user_by_id(id,new_data)
+        else:
+            print("Nenhum valor a ser atualizado")
+            return False
+
+    def delete_user(
+        self,
+        current_user_profile: str,
+        user_id: int,
+    ) -> tuple[bool, str]:
+        """
+        Método para deletar usuarios.
+        So é permitido deletar usuarios se o current_user_profile for Diretoria.
+        Caso não seja retorn false e a mensagem de acesso negado
+        Senão chame o método delete_user_by_id, passando o id do usuários
+        """
+
+        if current_user_profile=='Diretoria':
+            print("Usuário deletado como sucesso!")
+            return self.delete_user_by_id(user_id)
+        else:
+            print("Nível de autorização não permite deletar o usuário.")
+            print("Acesso negado!")
+            return False
+
+
+    def get_user_by_id(self, user_id: int) -> dict | None:
+        """
+        Método para pegar um usuarios pelo id
+        Retorne o usuarios apos passar pelo método _safe_user_data
+        """
+        if self._safe_user_data():
+            return user_id
+        
+
+
+    def get_all_users(self) -> list[dict | None]:
+        """
+        Método para retornar todos os usuários.
+        retorne todos os usuáriso apos passar pelo método _safe_user_data
+        """
+        if self._safe_user_data():
+            return self.user_model.get_all_users()        
