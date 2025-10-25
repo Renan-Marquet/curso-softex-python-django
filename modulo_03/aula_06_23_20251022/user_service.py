@@ -162,7 +162,7 @@ class UserService:
         Método para retornar todos os usuários.
         retorne todos os usuáriso apos passar pelo método _safe_user_data
         """
-        usuarios=self.user_model.get_all_users
+        usuarios=self.user_model.get_all_users()
         usuarios_tratados=[]
         for usuario in usuarios:
             usuarios_tratados.append(self._safe_user_data(usuario))
