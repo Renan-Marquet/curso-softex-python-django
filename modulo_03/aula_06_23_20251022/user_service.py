@@ -66,9 +66,9 @@ class UserService:
         perfil: str = "Afiliado",
     ) -> tuple[bool, str]:
         
-        senha=input("entre com a senha")
-        email=input("entre com o email")
-        nome_completo=input("digite seu nome comprelto")
+        # senha=input("entre com a senha")
+        # email=input("entre com o email")
+        # nome_completo=input("digite seu nome comprelto")
         
         if len(senha)<8:
             print("Erro! A senha deve ter no mínimo 8 caracteres")
@@ -97,18 +97,12 @@ class UserService:
         e a mensagem Login bem-sucedido!.
         Caso contrario retorne None e a mensagem de erro
         """
-        if self.find_user_by_email():
-            if senha == self.verificar_senha():
-                return self.user_model._safe_user_data(email)
-            else:
-                print("Senha não confere.")
-                print("Acesso negado.")
-                return False       
+        usuario=self.user_model.find_user_by_email(email)
+        if verificar_senha(senha,usuario['senha_hash']):
+            return self._safe_user_data(usuario),"Login bem sucedido."
         else:
-            print("Usuário não encontrado")
-            return False
-
-
+            return None,"Acesso Negado"       
+       
 
     def update_user_profile(
         self,
@@ -124,14 +118,12 @@ class UserService:
         Caso não haja nenhum valor a ser atualizado, encerre a função com False e mensagem de erro.
         Caso contrátio, chame o método da UserModel update_user_by_id passando o id e o new data
         """
-        if not self._is_authorized():
-            print("Acesso negado!")
-            return False
-        if new_data.senha != None and new_data.nome_completo != None and new_data.email != None:
-            return self.user_model.update_user_by_id(id,new_data)
+        if not self._is_authorized(current_user_id,current_user_profile,target_user_id,'edit_self'):
+            return False,"Acesso negado!"
+        if new_data['senha'] != None or new_data['nome_completo'] != None or new_data['email'] != None:
+            return self.user_model.update_user_by_id(target_user_id,new_data)
         else:
-            print("Nenhum valor a ser atualizado")
-            return False
+            return False,"Nenhum valor a ser atualizado."
 
     def delete_user(
         self,
@@ -146,12 +138,12 @@ class UserService:
         """
 
         if current_user_profile=='Diretoria':
-            print("Usuário deletado como sucesso!")
-            return self.delete_user_by_id(user_id)
+            # "Usuário deletado como sucesso."
+            return self.user_model.delete_user_by_id(user_id)
         else:
-            print("Nível de autorização não permite deletar o usuário.")
-            print("Acesso negado!")
-            return False
+            # print("Nível de autorização não permite deletar o usuário.")
+            # print("Acesso negado!")
+            return False,"Nível de autorização não permite deletar o usuário."
 
 
     def get_user_by_id(self, user_id: int) -> dict | None:
@@ -159,8 +151,9 @@ class UserService:
         Método para pegar um usuarios pelo id
         Retorne o usuarios apos passar pelo método _safe_user_data
         """
-        if self._safe_user_data():
-            return user_id
+        usuario=self.user_model.find_user_by_id(user_id)
+
+        return self._safe_user_data(usuario)
         
 
 
@@ -169,5 +162,9 @@ class UserService:
         Método para retornar todos os usuários.
         retorne todos os usuáriso apos passar pelo método _safe_user_data
         """
-        if self._safe_user_data():
-            return self.user_model.get_all_users()        
+        usuarios=self.user_model.get_all_users
+        usuarios_tratados=[]
+        for usuario in usuarios:
+            usuarios_tratados.append(self._safe_user_data(usuario))
+         
+        return usuarios_tratados        
