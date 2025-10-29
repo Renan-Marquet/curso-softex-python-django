@@ -9,28 +9,27 @@ print(listadestrings)
 
 
 
-#def remove_a(listastr:list[str]) -> list[str]:
-listastr=listadestrings
+def remove_a(listastr:list[str]) -> list[str]:
+#listastr=listadestrings
 
-
-
-
-a=True
-while a == True:
-    novalista=listastr.copy
-    novalista2=[]    
-    for indice in range(0,len(listastr)):
-        print(indice)
-        print(listastr[indice])
-        palavra=listastr[indice]
-        if "a" in palavra:
-            novalista.remove(palavra)
-            print(novalista)
-            #print(novalista2)
-        else:
-            print(f"{listastr[indice]} não tem a letra a")
-    a=False
+    a=True
+    while a == True:
+        novalista=listastr.copy()
+        novalista2=[]    
+        for indice in range(0,len(listastr)):
+            print(indice)
+            print(listastr[indice])
+            palavra=listastr[indice]
+            if "a" in palavra:
+                novalista.remove(palavra)
+                print(novalista)
+                #print(novalista2)
+            else:
+                print(f"{listastr[indice]} não tem a letra a")
+        a=False
+    return (novalista)
             
+#print()
             
             #print(indice)            
             #palavra=listastr[indice]
@@ -42,5 +41,5 @@ while a == True:
             #continue
         #return listastr  """    
     
-#print(remove_a(listadestrings))
+print(remove_a(listadestrings))
     
