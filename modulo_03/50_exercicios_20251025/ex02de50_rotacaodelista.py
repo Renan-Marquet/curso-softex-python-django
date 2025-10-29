@@ -1,8 +1,5 @@
-def duaslistas():
-    pass
 
-
-# 2
+# Exercicio 2 de 50
 
 def rot_lista(lista:list[any], k:int) -> list[any]:  
     primeira_parte=lista[:k]
@@ -11,11 +8,3 @@ def rot_lista(lista:list[any], k:int) -> list[any]:
     return nova_lista
 
 print(rot_lista([1,2,3,4,5],2))
-
-# 3
-
-listadestrings=["Abacate","pote","cruzes","tamanho","tempo"]
-
-def remove_a(listastr:list[str]) -> list[str]:
-    while True:
-        pass
