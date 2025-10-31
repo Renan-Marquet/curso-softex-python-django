@@ -1,45 +1,35 @@
 
-# exercicio 3 de 50
+# exercicio 3 de 50 remove()
 
-listadestrings=["Abacate","pote","cruzes","tamanho","tempo"]
-print(len(listadestrings))
+listadestrings=["Abacate","Antítese","pote","cruzes","tamanho","tempo"]
+#print(len(listadestrings))
 print(listadestrings)
-#listadestrings.pop(0)
-#print(listadestrings)
 
-
-
-def remove_a(listastr:list[str]) -> list[str]:
-#listastr=listadestrings
-
+def remove_a(listastr:list[str]) -> tuple:
     a=True
     while a == True:
         novalista=listastr.copy()
         novalista2=[]    
         for indice in range(0,len(listastr)):
-            print(indice)
-            print(listastr[indice])
+            #print(indice)
+            #print(listastr[indice])
             palavra=listastr[indice]
-            if "a" in palavra:
+            if "a" in palavra.lower():
+                novalista2.append(listastr[indice])
                 novalista.remove(palavra)
-                print(novalista)
+                #print(novalista)
                 #print(novalista2)
             else:
-                print(f"{listastr[indice]} não tem a letra a")
+                #print(f"{listastr[indice]} não tem a letra a")
+                continue
+            
+            #print(novalista2)
         a=False
-    return (novalista)
+    return (novalista),(novalista2)
+
+resultado=list(remove_a(listadestrings))
             
-#print()
-            
-            #print(indice)            
-            #palavra=listastr[indice]
-            #print(palavra)
-            #if 'a' in palavra:
-             #   listastr.pop(indice)
-            #else:
-                #    continue
-            #continue
-        #return listastr  """    
-    
-print(remove_a(listadestrings))
+
+print(f"Palavras sem 'a' {resultado[0]}.")
+print(f"Palavras com 'a' {resultado[1]}.")
     
