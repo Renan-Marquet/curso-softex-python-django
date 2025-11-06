@@ -1,5 +1,5 @@
 # unir e somar listas
-
+# com tratamento
 
 lista_A=['A','B','C','d','e','f']#,'g','h','i']
 lista_N=[1,2,3,4,5,6]
