@@ -1,4 +1,5 @@
-from django.shortcuts import render,redirect
+# Create your views here.
+from django.shortcuts import render,redirect, get_object_or_404
 #from django.http import HttpResponse
 from .models import Tarefa
 from .forms import TarefaForm
@@ -31,10 +32,34 @@ def home(request):
         'tarefas': todas_as_tarefas,# 4. Adicione as tarefas ao contexto
         'form':form
     }
-
-
-
     return render(request, 'home.html', context)
     #return HttpResponse("<h1>Olá Mundo! Esta é a minha terceira página Django!<h1>")
 
-# Create your views here.
+def concluir_tarefa(request, pk):
+     # 1. Busca a tarefa pela 'pk' (ID) vinda da URL.
+     #  # Se não achar, retorna um erro 404. 
+    tarefa = get_object_or_404(Tarefa, pk=pk) 
+    
+    # 2. Segurança: Apenas execute se o método for POST 
+    if request.method == 'POST': 
+        # 3. A Lógica de "Update" 
+        tarefa.concluida = True 
+        tarefa.save() # Não se esqueça de salvar! 
+        
+        # 4. Redireciona de volta para a 'home' (Padrão PRG) 
+        return redirect('home') 
+    
+   
+def deletar_tarefa(request, pk): 
+    # 1. Busca a tarefa 
+    tarefa = get_object_or_404(Tarefa, pk=pk) 
+    # 2. Segurança: Apenas execute se o método for POST 
+    if request.method == 'POST': 
+        # 3. A Lógica de "Delete" 
+        tarefa.delete() 
+
+        # 4. Redireciona de volta para a 'home' 
+        return redirect('home')
+
+
+

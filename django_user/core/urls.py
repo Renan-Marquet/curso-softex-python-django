@@ -12,4 +12,7 @@ urlpatterns =[
 
     # Ex: /tarefa/5/deletar/ 
     path('tarefa/<int:pk>/deletar/', views.deletar_tarefa, name='deletar_tarefa'), 
+
+    # ADICIONE A URL DE CADASTRO 
+    path('register/', views.register, name='register'),
     ]
