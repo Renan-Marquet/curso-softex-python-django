@@ -4,6 +4,7 @@ from.import views
 urlpatterns =[
     # Nossas URLS antigas
     path('',views.home, name='home'),
+    path('login/', views.login, name='login'),
 
     # NOSSAS NOVAS URLs DINÂMICAS 
     # # Ex: /tarefa/5/concluir/ 

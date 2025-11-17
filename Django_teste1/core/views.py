@@ -1,6 +1,6 @@
 # Create your views here.
 from django.shortcuts import render,redirect, get_object_or_404
-#from django.http import HttpResponse
+from django.http import HttpResponse
 from .models import Tarefa
 from .forms import TarefaForm
 
@@ -60,6 +60,9 @@ def deletar_tarefa(request, pk):
 
         # 4. Redireciona de volta para a 'home' 
         return redirect('home')
+    
+def login(request):
+    return HttpResponse("<input>Entrada!</input>")
 
 
 
