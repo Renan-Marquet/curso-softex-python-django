@@ -28,14 +28,15 @@ class RedeSocial:
         encontrou_algo = False
         for post in self.banco_de_posts:
     # --- APAGUE A LINHA ABAIXO E CRIE SEU IF AQUI ---
-            if self.dono == usuario_logado:
+            if post.dono == usuario_logado:
 
                 print(f" {post.texto} (Postado por: {post.dono.apelido})")
-        encontrou_algo = True
+                encontrou_algo = True
 # --------------------------------------------------
         if not encontrou_algo:
-            print(" (Nenhum post encontrado )")
-            print("-" * 30 + "\n")
+            #else:
+                print(" (Nenhum post encontrado )")
+                print("-" * 30 + "\n")
 # --- ÁREA DE PERSONALIZAÇÃO (MUDE OS DADOS ABAIXO!) ---
 # 1. Criando usuários
 # TODO: Coloque seu nome e invente um apelido
