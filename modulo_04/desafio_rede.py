@@ -5,21 +5,17 @@ class Usuario:
         self.apelido = apelido
 
 class Post:
-
     def __init__(self, texto, dono):
         self.texto = texto
         self.dono = dono
 
 class RedeSocial:
-
     def __init__(self):
         self.banco_de_posts = []
-
     def criar_post(self, texto, usuario_logado):
         novo_post = Post(texto, usuario_logado)
         self.banco_de_posts.append(novo_post)
-        print(f" Post criado por {usuario_logado.apelido}!")
-        
+        print(f" Post criado por {usuario_logado.apelido}!")  
     def ver_meu_perfil(self, usuario_logado):
         print(f"\n --- PERFIL DE {usuario_logado.nome.upper()} ---")
         print(f" Usuário: {usuario_logado.apelido}")
