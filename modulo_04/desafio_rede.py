@@ -57,3 +57,6 @@ minha_rede_social.criar_post("Ganhou mais importância agora!", usuario_principa
 # Se o seu código estiver certo, aqui só deve aparecer os posts do SEU USUÁRIO!
 print("\n--- TESTANDO SEU CÓDIGO ---")
 minha_rede_social.ver_meu_perfil(usuario_principal)
+
+
+##
