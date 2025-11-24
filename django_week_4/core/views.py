@@ -3,6 +3,7 @@ from django.shortcuts import render,redirect, get_object_or_404
 #from django.http import HttpResponse
 from .models import Tarefa
 from .forms import TarefaForm
+from django.contrib import messages 
 from django.contrib.auth.forms import UserCreationForm # 1. Importe o form 
 from django.contrib.auth import login         # 2. Importe a função 'login'
 from django.contrib.auth.decorators import login_required # 1. Importe o decorador
@@ -71,9 +72,10 @@ def concluir_tarefa(request, pk):
         # 3. A Lógica de "Update" 
         tarefa.concluida = True 
         tarefa.save() # Não se esqueça de salvar! 
+        #messages.success(request, 'Parabéns! Tarefa concluída com sucesso!')
         
         # 4. Redireciona de volta para a 'home' (Padrão PRG) 
-    return redirect('home') 
+        return redirect('home') 
     
 @login_required   
 def deletar_tarefa(request, pk): 
