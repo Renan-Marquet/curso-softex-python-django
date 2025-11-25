@@ -72,7 +72,7 @@ def concluir_tarefa(request, pk):
         # 3. A Lógica de "Update" 
         tarefa.concluida = True 
         tarefa.save() # Não se esqueça de salvar! 
-        #messages.success(request, 'Parabéns! Tarefa concluída com sucesso!')
+        messages.success(request, 'Parabéns! Tarefa concluída com sucesso!')
         
         # 4. Redireciona de volta para a 'home' (Padrão PRG) 
         return redirect('home') 
