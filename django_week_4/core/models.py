@@ -1,7 +1,8 @@
 from django.db import models
 # 1. Importe o Model de User padrão do Django 
 from django.contrib.auth.models import User
-
+# 1. Importe o Model do outro app! 
+from projects.models import Project
 # Create your models here.
 # core/models.py from django.db import models 
 # 
@@ -12,6 +13,10 @@ class Tarefa(models.Model):
 # # 'on_delete=models.CASCADE' diz ao banco: 
 # # "Se o usuário for deletado, delete todas as tarefas dele também." 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    # 2. ADICIONE A NOVA RELAÇÃO 
+    # # Cada Tarefa agora DEVE estar ligada a um Projeto.
+    #  # 'related_name' é uma boa prática para consultas inversas. 
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name='tarefas')
      
 # # Um campo de texto curto, com máximo de 200 caracteres 
     titulo = models.CharField(max_length=200) 

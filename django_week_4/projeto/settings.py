@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'core',   
+    'core', 
+    'projects', #novo app instalado aula 8 de django  
 ]
 
 MIDDLEWARE = [

@@ -15,7 +15,7 @@ def home(request):
     # 3. Lógica de POST: Se o formulário foi enviado 
     if request.method == 'POST': 
         # Cria uma instância do form e preenche com os dados do POST
-        form = TarefaForm(request.POST) 
+        form = TarefaForm(request.POST, user=request.user) 
         # 4. O Django valida os dados (max_length, etc.) 
         if form.is_valid(): 
             # 5. Salva o objeto no banco de dados! 
@@ -34,7 +34,9 @@ def home(request):
         # o 'form' (com os erros) será enviado para o template
      # 7. Lógica de GET: Se o usuário apenas visitou a página
     else: 
-        form = TarefaForm() 
+        # 2. Passe o 'user' logado para o formulário no GET 
+        form = TarefaForm(user=request.user)
+        #form = TarefaForm() 
         # Cria um formulário vazio
     # # Tarefa.objects.all() significa: "Pegue todas as linhas da tabela Tarefa" 
     #todas_as_tarefas = Tarefa.objects.all()
