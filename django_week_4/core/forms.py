@@ -18,7 +18,7 @@ class TarefaForm(forms.ModelForm):
 
 class TarefaForm(forms.ModelForm):
      # 1. Vamos sobrescrever o construtor do formulário 
-    def __init__(self, *args, **kwargs): 
+    def __init__(self, *args, **kwargs): # um * retorna lista dois ** retorna dicionario
         # 2. Capture o 'user' que será passado pela view 
         user = kwargs.pop('user', None) 
         # 3. Chame o construtor original (pai) 
