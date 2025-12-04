@@ -1,8 +1,8 @@
-
+from django.db import models
 
 # Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
+
 class Tarefa(models.Model):
     """
     Model para representar uma tarefa de usuário.
@@ -45,3 +45,6 @@ class Meta:
     def __str__(self):
         """Representação em string (usado no admin)"""
         return f"{self.titulo} ({'✓' if self.concluida else '✗'})"
+#
+#
+#

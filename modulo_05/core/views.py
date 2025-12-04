@@ -1,4 +1,4 @@
-from django.shortcuts import render
+#from django.shortcuts import render
 
 # Create your views here.
 from rest_framework.views import APIView
@@ -21,8 +21,11 @@ class ListaTarefasAPIView(APIView):
         """
         # 1. BUSCAR: ORM do Django busca todos os registros
         tarefas = Tarefa.objects.all()
+
         # 2. SERIALIZAR: Converter objetos Python → JSON
         # many=True: indica que é uma lista de objetos
+
         serializer = TarefaSerializer(tarefas, many=True)
+        
         # 3. RESPONDER: Retornar JSON com status HTTP
         return Response(serializer.data, status=status.HTTP_200_OK)
