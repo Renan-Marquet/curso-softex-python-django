@@ -38,7 +38,7 @@ class ListaTarefasAPIView(APIView):
             status=status.HTTP_200_OK
             )
     
-    #def post(self, request, format=None):
+    def post(self, request, format=None):
         """
         Cria uma nova tarefa.
         Args:
@@ -51,7 +51,7 @@ class ListaTarefasAPIView(APIView):
             201 Created: Tarefa criada com sucesso
             400 Bad Request: Dados inválidos
         """
-        '''
+        
         # 1. INSTANCIAR: Criar serializer com dados recebidos
         serializer = TarefaSerializer(
             data=request.data,
@@ -72,8 +72,9 @@ class ListaTarefasAPIView(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
-        '''
+        
         """
+    def post(self, request, format=None):
         try:
             serializer = TarefaSerializer(data=request.data)
             if serializer.is_valid():
@@ -99,6 +100,7 @@ class ListaTarefasAPIView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
         """
+    """     
     def post(self, request, format=None):
         try:
             serializer = TarefaSerializer(data=request.data)
@@ -120,3 +122,4 @@ class ListaTarefasAPIView(APIView):
                 {'error': 'Erro interno do servidor.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+            """
