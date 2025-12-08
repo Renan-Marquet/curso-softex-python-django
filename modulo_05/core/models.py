@@ -19,6 +19,8 @@ class Tarefa(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        null=True, # Permilte NULL no banco (apostila 2 de REST)
+        blank=True, # Permite vazios em formulários (apostila 2 de REST)
         related_name='tarefas', # Permite user.tarefas.all()
         verbose_name='Usuário'
     )
