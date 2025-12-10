@@ -199,7 +199,8 @@ class DetalheTarefaAPIView(APIView):
             # 5. RESPONDER 
             return Response(serializer.data, status=status.HTTP_200_OK) 
         # ERRO 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None): 
         """ 
