@@ -8,6 +8,7 @@ from .models import Tarefa
 from .serializers import TarefaSerializer
 from rest_framework.exceptions import ValidationError
 from django.db import IntegrityError 
+from django.shortcuts import get_object_or_404
 
 import logging
 logger = logging.getLogger(__name__)
@@ -123,3 +124,90 @@ class ListaTarefasAPIView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
             """
+class DetalheTarefaAPIView(APIView): 
+    """
+    def get(self, request, pk, format=None): 
+        # ^^ 
+        # # Parâmetro capturado da URL 
+        print(f"Buscando tarefa com ID: {pk}")
+        try:
+           tarefa = Tarefa.objects.get(pk=pk) 
+        except Tarefa.DoesNotExist: return Response({'error': 'Tarefa não encontrada'}, status=404)
+    """
+        #tarefa = get_object_or_404(Tarefa, pk=pk) 
+        # Automaticamente lança uma exceção Http404 se não encontrar
+    #""" View para operações em recurso individual. """ 
+    #def get_object(self, pk): 
+        #""" Busca a tarefa pelo ID e retorna 404 se não encontrada. """ 
+        #return get_object_or_404(Tarefa, pk=pk) 
+    # ... Métodos GET, PUT, PATCH, DELETE usarão self.get_object(pk)
+
+    def get_object(self, pk): 
+        """Busca tarefa ou retorna 404.""" 
+        return get_object_or_404(Tarefa, pk=pk) 
+    def get(self, request, pk, format=None): 
+        """ Retorna os dados de uma tarefa específica. 
+        Args: 
+            pk: ID da tarefa na URL 
+        Returns: 
+            200 OK: Tarefa encontrada 
+            404 Not Found: Tarefa não existe """
+        # 1. BUSCAR: Usa método auxiliar (trata 404) 
+        tarefa = self.get_object(pk) 
+        # 2. SERIALIZAR: Converte objeto único (sem many=True) 
+        serializer = TarefaSerializer(tarefa) 
+        # 3. RESPONDER: Retorna JSON com status 200 
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def put(self, request, pk, format=None): 
+        """ 
+        Atualiza tarefa completamente (substituição total). 
+        Exige que TODOS os campos editáveis sejam enviados. """ 
+        # 1. BUSCAR: Obter o objeto existente 
+        tarefa = self.get_object(pk) 
+        # 2. SERIALIZAR: Passar objeto antigo E novos dados 
+        serializer = TarefaSerializer(tarefa, data=request.data) 
+        # ^^^^^ ^^^^^^^^^^^^^^^^ 
+        # # | Nova versão 
+        # # Versão atual 
+        # # 3. VALIDAR: Checar se JSON está completo e válido 
+        if serializer.is_valid(): 
+            # 4. SALVAR: Atualizar no banco 
+            serializer.save() 
+            # 5. RESPONDER: Retornar objeto atualizado 
+            return Response(serializer.data, status=status.HTTP_200_OK) 
+        # ERRO: Retornar erros de validação 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def patch(self, request, pk, format=None): 
+        """ 
+        Atualiza tarefa parcialmente (merge). 
+        Permite enviar apenas os campos que serão modificados. 
+        """ 
+        # 1. BUSCAR: Obter o objeto existente 
+        tarefa = self.get_object(pk) 
+        # 2. SERIALIZAR: Passar objeto, novos dados E partial=True 
+        serializer = TarefaSerializer( 
+            tarefa, 
+            data=request.data, 
+            partial=True # <--- ESSENCIAL PARA O PATCH 
+            ) 
+        # 3. VALIDAR 
+        if serializer.is_valid(): 
+            # 4. SALVAR (aplica apenas os campos recebidos) 
+            serializer.save() 
+            # 5. RESPONDER 
+            return Response(serializer.data, status=status.HTTP_200_OK) 
+        # ERRO 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk, format=None): 
+        """ 
+        Remove um recurso específico. 
+        """ 
+        # 1. BUSCAR: Obter o objeto (trata 404 se não existir) 
+        tarefa = self.get_object(pk) 
+        # 2. DELETAR 
+        tarefa.delete() 
+        # # 3. RESPONDER: 204 No Content (sucesso sem corpo de resposta) 
+        return Response(status=status.HTTP_204_NO_CONTENT)
