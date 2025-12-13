@@ -9,4 +9,4 @@ class TarefaAdmin(admin.ModelAdmin):
     search_fields = ['prioridade','titulo', 'user__username']
     from .models import Tarefa
 
-#Acerto
+#Acerto...
