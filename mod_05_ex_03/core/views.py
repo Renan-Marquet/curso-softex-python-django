@@ -6,9 +6,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Tarefa
 from .serializers import TarefaSerializer
-from rest_framework.exceptions import ValidationError
-from django.db import IntegrityError 
+#from rest_framework.exceptions import ValidationError
+#from django.db import IntegrityError 
 from django.shortcuts import get_object_or_404
+#from django.http import JsonResponse
+from rest_framework.decorators import api_view
 
 import logging
 logger = logging.getLogger(__name__)
@@ -227,16 +229,22 @@ class ContagemTarefasAPIView(APIView):
             "pendentes": pendentes
         }, status=status.HTTP_200_OK)
     
-def duplicar_tarefa(request, tarefa_id):
-    tarefa = get_object_or_404(Tarefa, id=tarefa_id)
+
+@api_view(['POST'])    
+def duplicar_tarefa(request, pk):
+    tarefa = get_object_or_404(Tarefa, id=pk)
 
     nova_tarefa = Tarefa.objects.create(
+        user=tarefa.user,
         titulo=f"{tarefa.titulo} (Cópia)",
         descricao=tarefa.descricao,
+        prioridade=tarefa.prioridade,
+        prazo=tarefa.prazo,
+
         concluida=False
     )
 
-    return JsonResponse({
+    return Response({
         "mensagem": "Tarefa duplicada com sucesso!",
-        "id_nova_tarefa": nova_tarefa.id
-    })
+        "tarefa": TarefaSerializer(nova_tarefa).data,
+    }, status=status.HTTP_201_CREATED)

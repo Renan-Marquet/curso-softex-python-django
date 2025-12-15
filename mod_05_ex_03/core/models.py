@@ -58,35 +58,34 @@ class Tarefa(models.Model):
     )
     #prazo = models.DateField("YYYY-MM-DD")
     prazo = models.DateField(default=timezone.now)
-
+    '''
     def clean(self):
         if self.prazo < timezone.now().date():
             raise ValidationError({
                 'prazo': 'O prazo não pode ser uma data no passado.'
-            })
+            })'''
     
     def save(self, *args, **kwargs):
+        #self.full_clean() # garante validações do model
         if self.concluida and self.data_conclusao is None:
             self.data_conclusao = timezone.now()
-        elif not self.concluida:
+        if not self.concluida:
             self.data_conclusao = None
         super().save(*args, **kwargs)
 
-
-    def __str__(self):
-        return self.titulo
-
-
-
-
-class Meta:
-    verbose_name = 'Tarefa'
-    verbose_name_plural = 'Tarefas'
-    ordering = ['-criada_em'] # Mais recentes primeiro
     def __str__(self):
         """Representação em string (usado no admin)"""
         return f"{self.titulo} ({'✓' if self.concluida else '✗'})"
-#
+    #
+
+    '''def __str__(self):
+        return self.titulo'''
+
+    class Meta:
+        verbose_name = 'Tarefa'
+        verbose_name_plural = 'Tarefas'
+        ordering = ['-criada_em'] # Mais recentes primeiro
+    
 
 
 

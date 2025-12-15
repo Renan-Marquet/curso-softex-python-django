@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Tarefa
+from django.utils import timezone
 
 class TarefaSerializer(serializers.ModelSerializer):
     """
@@ -26,9 +27,18 @@ class TarefaSerializer(serializers.ModelSerializer):
         Na Apostila 4 será ingetado automaticamente pelo sevidor
         """
         #fields = ['id', 'user', 'titulo', 'concluida', 'criada_em']
-        fields = ['id', 'titulo', 'descricao', 'concluida', 'criada_em']
+        fields = [
+            'id', 
+            'titulo', 
+            'descricao', 
+            'prioridade', 
+            'prazo', 
+            'concluida', 
+            'data_conclusao', 
+            'criada_em',
+            ]
         # Campos gerados automaticamente (não aceitos na entrada)
-        read_only_fields = ['id', 'criada_em']
+        read_only_fields = ['id', 'criada_em', 'data_conclusao']
     
     def validate_titulo(self, value):
         """
@@ -81,3 +91,12 @@ class TarefaSerializer(serializers.ModelSerializer):
                 "Tarefas urgentes não podem ser criadas como concluídas."
             )
         return data
+    
+    
+    def validate_prazo(self, value):
+        if value < timezone.now().date():
+            raise serializers.ValidationError(
+            "O prazo não pode ser uma data no passado."
+            )
+        return value
+    
