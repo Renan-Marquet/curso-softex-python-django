@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 import environ
 from pathlib import Path
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -133,3 +134,25 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuração do Django REST Framework 
+REST_FRAMEWORK = { 
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+         # Define JWT como método de autenticação PADRÃO 
+         'rest_framework_simplejwt.authentication.JWTAuthentication', 
+         ), 
+         # Outras configurações padrão 
+         }
+# Configuração do Simple JWT 
+SIMPLE_JWT = { 
+    # Tempo de vida do Access Token (curto!) 
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60), 
+    # Tempo de vida do Refresh Token (longo!) 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), 
+    # Define o esquema de autenticação no header HTTP 
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    # Algoritmo de criptografia 
+    'ALGORITHM': 'HS256', 
+    # Nome do campo de usuário no payload (user_id é padrão) 
+    'USER_ID_CLAIM': 'user_id', 
+    }

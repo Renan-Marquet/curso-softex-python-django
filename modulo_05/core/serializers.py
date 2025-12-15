@@ -17,7 +17,17 @@ class TarefaSerializer(serializers.ModelSerializer):
             'blank': 'O título não pode ser vazio.',
             'max_length': 'O título não pode ter mais de 200 caracteres.'
         }
-    )
+        )
+
+    """ 
+    Serializer para Tarefa com segurança.
+      O campo 'user' é exibido (read-only) mas NÃO aceito na entrada. 
+    """
+        # 1. Mostra o username do usuário em vez do ID (read-only na saída) 
+    user = serializers.StringRelatedField(read_only=True)
+    
+
+
     class Meta:
         model = Tarefa
         """
@@ -26,9 +36,9 @@ class TarefaSerializer(serializers.ModelSerializer):
         Na Apostila 4 será ingetado automaticamente pelo sevidor
         """
         #fields = ['id', 'user', 'titulo', 'concluida', 'criada_em']
-        fields = ['id', 'titulo', 'concluida', 'criada_em']
+        fields = ['id','user', 'titulo', 'concluida', 'criada_em']
         # Campos gerados automaticamente (não aceitos na entrada)
-        read_only_fields = ['id', 'criada_em']
+        read_only_fields = ['id','user', 'criada_em']
     
     def validate_titulo(self, value):
         """

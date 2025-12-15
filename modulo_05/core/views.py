@@ -9,6 +9,8 @@ from .serializers import TarefaSerializer
 from rest_framework.exceptions import ValidationError
 from django.db import IntegrityError 
 from django.shortcuts import get_object_or_404
+from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics
 
 import logging
 logger = logging.getLogger(__name__)
@@ -212,3 +214,36 @@ class DetalheTarefaAPIView(APIView):
         tarefa.delete() 
         # # 3. RESPONDER: 204 No Content (sucesso sem corpo de resposta) 
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class MinhaView(APIView): 
+    # Adicionando a permissão 
+    permission_classes = [IsAuthenticated] 
+    def get(self, request): 
+        # Se chegou aqui, request.user é SEMPRE um objeto User logado 
+        print(f"Usuário autenticado: {request.user.username}")
+
+class TarefaListCreateAPIView(generics.ListCreateAPIView): 
+    """ Lista tarefas e permite a criação de novas tarefas. PROTEGIDA: Requer autenticação JWT. """ 
+    queryset = Tarefa.objects.all() 
+    serializer_class = TarefaSerializer 
+    permission_classes = [IsAuthenticated] # ← Proteção 
+    # MÉTODO CHAVE: Injeta o usuário logado antes de salvar o objeto 
+    def perform_create(self, serializer):
+        """ 
+        Associa a tarefa ao usuário logado (request.user) automaticamente. 
+        """
+         # request.user é garantido como autenticado pelo IsAuthenticated 
+        serializer.save(user=self.request.user) 
+        # A URL deve apontar para esta view em core/urls.py
+        # path('tarefas/', TarefaListCreateAPIView.as_view(), name='tarefa-list-create'),
+
+class TarefaRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView): 
+    """ 
+    Detalhes de tarefa, atualização e exclusão. 
+    PROTEGIDA: Requer autenticação JWT. 
+    """ 
+    queryset = Tarefa.objects.all() 
+    serializer_class = TarefaSerializer 
+    permission_classes = [IsAuthenticated] # ← Proteção 
+    # A URL deve apontar para esta view em core/urls.py 
+    # path('tarefas/<int:pk>/', TarefaRetrieveUpdateDestroyAPIView.as_view(), name='tarefa-detail
