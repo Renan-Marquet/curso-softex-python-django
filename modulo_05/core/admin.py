@@ -1,7 +1,10 @@
 from django.contrib import admin
+from rest_framework.authtoken.models import Token
 
 # Register your models here.
 from .models import Tarefa
+
+admin.site.register(Token)
 
 @admin.register(Tarefa)
 class TarefaAdmin(admin.ModelAdmin):

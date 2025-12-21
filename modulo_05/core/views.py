@@ -1,45 +1,31 @@
-#from django.shortcuts import render
-
-# Create your views here.
+#core/views.py
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from .models import Tarefa
-from .serializers import TarefaSerializer
-from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated , AllowAny
+from rest_framework.exceptions import ValidationError 
+from rest_framework import generics , status
 from django.db import IntegrityError 
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import generics
-
+from django.contrib.auth.models import User
+from .models import Tarefa
+from .permissions import IsGerente
+from .serializers import TarefaSerializer , UserRegistrationSerializer
 import logging
 logger = logging.getLogger(__name__)
 
 class ListaTarefasAPIView(APIView):
     """
     View para listar todas as tarefas (GET).
-    Endpoints:
-    GET /api/tarefas/ - Lista todas as tarefas
+    Endpoints:GET /api/tarefas/ - Lista todas as tarefas
     """
     def get(self, request, format=None):
         """
         Retorna lista de todas as tarefas do banco.
-        Returns:
-        Response: JSON com lista de tarefas e status 200
+        Returns: Response: JSON com lista de tarefas e status 200
         """
-        # 1. BUSCAR: ORM do Django busca todos os registros
-        tarefas = Tarefa.objects.all()
-
-        # 2. SERIALIZAR: Converter objetos Python → JSON
-        # many=True: indica que é uma lista de objetos
-
-        serializer = TarefaSerializer(tarefas, many=True)
-        
-        # 3. RESPONDER: Retornar JSON com status HTTP
-        return Response(
-            serializer.data, 
-            status=status.HTTP_200_OK
-            )
+        tarefas = Tarefa.objects.all()  # 1. BUSCAR: ORM do Django busca todos os registros
+        serializer = TarefaSerializer(tarefas, many=True)  # 2. SERIALIZAR: Converter objetos Python → JSON  # many=True: indica que é uma lista de objetos   
+        return Response(serializer.data, status=status.HTTP_200_OK) # 3. RESPONDER: Retornar JSON com status HTTP
     
     def post(self, request, format=None):
         """
@@ -53,30 +39,16 @@ class ListaTarefasAPIView(APIView):
         Returns:
             201 Created: Tarefa criada com sucesso
             400 Bad Request: Dados inválidos
-        """
-        
+        """     
         # 1. INSTANCIAR: Criar serializer com dados recebidos
-        serializer = TarefaSerializer(
-            data=request.data,
-            context={'request': request} #Passa o request
-            )
-        # 2. VALIDAR: Checar se os dados são válidos
-        if serializer.is_valid():
-            # 3. SALVAR: Persistir no banco de dados
-            serializer.save()
-            # 4. RESPONDER: Retornar objeto criado + status 201
-            return Response(
-                serializer.data,
-                status=status.HTTP_201_CREATED
-            )
-        
+        serializer = TarefaSerializer( data=request.data,context={'request': request} )  #Passa o request      
+        if serializer.is_valid():# 2. VALIDAR: Checar se os dados são válidos
+            serializer.save()  # 3. SALVAR: Persistir no banco de dados
+            return Response(serializer.data, status=status.HTTP_201_CREATED) # 4. RESPONDER: Retornar objeto criado + status 201
         # 5. ERRO: Retornar erros de validação + status 400
-        return Response(
-            serializer.errors,
-            status=status.HTTP_400_BAD_REQUEST
-        )
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
         
-        """
+    ''' 
     def post(self, request, format=None):
         try:
             serializer = TarefaSerializer(data=request.data)
@@ -102,7 +74,7 @@ class ListaTarefasAPIView(APIView):
                 {'error': 'Erro interno do servidor.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        """
+    '''
     """     
     def post(self, request, format=None):
         try:
@@ -125,8 +97,9 @@ class ListaTarefasAPIView(APIView):
                 {'error': 'Erro interno do servidor.'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-            """
+    """        
 class DetalheTarefaAPIView(APIView): 
+    
     """
     def get(self, request, pk, format=None): 
         # ^^ 
@@ -144,8 +117,7 @@ class DetalheTarefaAPIView(APIView):
         #return get_object_or_404(Tarefa, pk=pk) 
     # ... Métodos GET, PUT, PATCH, DELETE usarão self.get_object(pk)
 
-    def get_object(self, pk): 
-        """Busca tarefa ou retorna 404.""" 
+    def get_object(self, pk): #"""Busca tarefa ou retorna 404.""" 
         return get_object_or_404(Tarefa, pk=pk) 
     def get(self, request, pk, format=None): 
         """ Retorna os dados de uma tarefa específica. 
@@ -153,73 +125,53 @@ class DetalheTarefaAPIView(APIView):
             pk: ID da tarefa na URL 
         Returns: 
             200 OK: Tarefa encontrada 
-            404 Not Found: Tarefa não existe """
-        # 1. BUSCAR: Usa método auxiliar (trata 404) 
-        tarefa = self.get_object(pk) 
-        # 2. SERIALIZAR: Converte objeto único (sem many=True) 
-        serializer = TarefaSerializer(tarefa) 
-        # 3. RESPONDER: Retorna JSON com status 200 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            404 Not Found: Tarefa não existe """    
+        tarefa = self.get_object(pk) # 1. BUSCAR: Usa método auxiliar (trata 404) 
+        serializer = TarefaSerializer(tarefa) # 2. SERIALIZAR: Converte objeto único (sem many=True) 
+        return Response(serializer.data, status=status.HTTP_200_OK)# 3. RESPONDER: Retorna JSON com status 200 
     
     def put(self, request, pk, format=None): 
         """ 
         Atualiza tarefa completamente (substituição total). 
         Exige que TODOS os campos editáveis sejam enviados. """ 
-        # 1. BUSCAR: Obter o objeto existente 
-        tarefa = self.get_object(pk) 
-        # 2. SERIALIZAR: Passar objeto antigo E novos dados 
-        serializer = TarefaSerializer(tarefa, data=request.data) 
-        # ^^^^^ ^^^^^^^^^^^^^^^^ 
-        # # | Nova versão 
-        # # Versão atual 
-        # # 3. VALIDAR: Checar se JSON está completo e válido 
-        if serializer.is_valid(): 
-            # 4. SALVAR: Atualizar no banco 
-            serializer.save() 
-            # 5. RESPONDER: Retornar objeto atualizado 
-            return Response(serializer.data, status=status.HTTP_200_OK) 
-        # ERRO: Retornar erros de validação 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        tarefa = self.get_object(pk)  # 1. BUSCAR: Obter o objeto existente 
+        serializer = TarefaSerializer(tarefa, data=request.data)  # 2. SERIALIZAR: Passar objeto antigo E novos dados
+        if serializer.is_valid():  # 3. VALIDAR: Checar se JSON está completo e válido    
+            serializer.save() # 4. SALVAR: Atualizar no banco
+            return Response(serializer.data, status=status.HTTP_200_OK)  # 5. RESPONDER: Retornar objeto atualizado 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  # ERRO: Retornar erros de validação 
     
     def patch(self, request, pk, format=None): 
         """ 
         Atualiza tarefa parcialmente (merge). 
         Permite enviar apenas os campos que serão modificados. 
         """ 
-        # 1. BUSCAR: Obter o objeto existente 
-        tarefa = self.get_object(pk) 
+       
+        tarefa = self.get_object(pk)  # 1. BUSCAR: Obter o objeto existente 
         # 2. SERIALIZAR: Passar objeto, novos dados E partial=True 
         serializer = TarefaSerializer( 
             tarefa, 
             data=request.data, 
             partial=True # <--- ESSENCIAL PARA O PATCH 
             ) 
-        # 3. VALIDAR 
-        if serializer.is_valid(): 
-            # 4. SALVAR (aplica apenas os campos recebidos) 
-            serializer.save() 
-            # 5. RESPONDER 
-            return Response(serializer.data, status=status.HTTP_200_OK) 
-        # ERRO 
-        else:
+    
+        if serializer.is_valid():     # 3. VALIDAR 
+            serializer.save()  # 4. SALVAR (aplica apenas os campos recebidos) 
+            return Response(serializer.data, status=status.HTTP_200_OK)  # 5. RESPONDER 
+        else:    # ERRO 
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, format=None): 
         """ 
         Remove um recurso específico. 
-        """ 
-        # 1. BUSCAR: Obter o objeto (trata 404 se não existir) 
-        tarefa = self.get_object(pk) 
-        # 2. DELETAR 
-        tarefa.delete() 
-        # # 3. RESPONDER: 204 No Content (sucesso sem corpo de resposta) 
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        """          
+        tarefa = self.get_object(pk) # 1. BUSCAR: Obter o objeto (trata 404 se não existir)
+        tarefa.delete()  # 2. DELETAR 
+        return Response(status=status.HTTP_204_NO_CONTENT)  # # 3. RESPONDER: 204 No Content (sucesso sem corpo de resposta) 
     
 class MinhaView(APIView): 
-    # Adicionando a permissão 
-    permission_classes = [IsAuthenticated] 
-    def get(self, request): 
-        # Se chegou aqui, request.user é SEMPRE um objeto User logado 
+    permission_classes = [IsAuthenticated] # Adicionando a permissão 
+    def get(self, request):  # Se chegou aqui, request.user é SEMPRE um objeto User logado     
         print(f"Usuário autenticado: {request.user.username}")
 
 class TarefaListCreateAPIView(generics.ListCreateAPIView): 
@@ -227,6 +179,15 @@ class TarefaListCreateAPIView(generics.ListCreateAPIView):
     queryset = Tarefa.objects.all() 
     serializer_class = TarefaSerializer 
     permission_classes = [IsAuthenticated] # ← Proteção 
+    # Exige Token válido 
+    def get_queryset(self): 
+        # """ Sobrescreve o comportamento padrão para retornar
+        #  APENAS os dados pertencentes ao usuário logado. """ 
+        user = self.request.user  # 1. Recupera o usuário validado pelo JWT 
+        return Tarefa.objects.filter(user=user)  # 2. Retorna o filtro. O Django fará o WHERE user_id = X no banco.
+    def perform_create(self, serializer): 
+        # Garante que a tarefa criada seja vinculada ao usuário logado 
+        serializer.save(user=self.request.user)
     # MÉTODO CHAVE: Injeta o usuário logado antes de salvar o objeto 
     def perform_create(self, serializer):
         """ 
@@ -244,6 +205,23 @@ class TarefaRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     """ 
     queryset = Tarefa.objects.all() 
     serializer_class = TarefaSerializer 
-    permission_classes = [IsAuthenticated] # ← Proteção 
+    def get_queryset(self): 
+        return Tarefa.objects.filter(user=self.request.user) 
+    def get_permissions(self): 
+        """ Instancia e retorna a lista de permissões que esta view requer, 
+        dependendo do método HTTP da requisição. """ 
+        if self.request.method == 'DELETE': 
+            # Para deletar: Precisa estar logado E ser Gerente 
+            # # A ordem importa: primeiro checa login, depois o grupo 
+            return [IsAuthenticated(), IsGerente()] 
+        # Para GET, PUT, PATCH: Basta estar logado (e ser dono, garantido pelo queryset) 
+        return [IsAuthenticated()]
+    #permission_classes = [IsAuthenticated] # ← Proteção 
     # A URL deve apontar para esta view em core/urls.py 
     # path('tarefas/<int:pk>/', TarefaRetrieveUpdateDestroyAPIView.as_view(), name='tarefa-detail
+class RegisterView(generics.CreateAPIView): 
+    """ Endpoint para cadastro de novos usuários. 
+    Acesso: Público (Qualquer um pode criar conta). """ 
+    queryset = User.objects.all() 
+    permission_classes = [AllowAny] # Sobrescreve o padrão global 
+    serializer_class = UserRegistrationSerializer
