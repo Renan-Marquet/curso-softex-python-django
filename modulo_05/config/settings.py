@@ -13,6 +13,7 @@ import os
 import environ
 from pathlib import Path
 from datetime import timedelta
+import sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -156,4 +157,13 @@ SIMPLE_JWT = {
     'ALGORITHM': 'HS256', 
     # Nome do campo de usuário no payload (user_id é padrão) 
     'USER_ID_CLAIM': 'user_id', 
+    }
+
+# Configuração para acelerar testes 
+# # Se o comando 'test' estiver sendo executado, 
+# trocamos o banco para SQLite em memória 
+if 'test' in sys.argv: 
+    DATABASES['default'] = {
+         'ENGINE': 'django.db.backends.sqlite3', 
+         'NAME': ':memory:', # Banco reside apenas na RAM
     }
